@@ -6,6 +6,7 @@ import "./styles.css";
 
 export default function App() {
   const {
+    canGiveUp,
     currentGuess,
     giveUp,
     guesses,
@@ -24,12 +25,11 @@ export default function App() {
             <h1>Wordle</h1>
           </header>
 
-          {status === "playing" &&
-            (guesses.length > 0 || !currentGuess.includes(" ")) && (
-              <button className="give-up" onClick={giveUp} type="button">
-                Give up
-              </button>
-            )}
+          {canGiveUp && (
+            <button className="give-up" onClick={giveUp} type="button">
+              Give up
+            </button>
+          )}
 
           <Board currentGuess={currentGuess} guesses={guesses} />
 

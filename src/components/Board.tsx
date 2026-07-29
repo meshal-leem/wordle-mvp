@@ -1,3 +1,4 @@
+import { createGuessTemplate } from "../game/draftGuess";
 import type { SubmittedGuess } from "../game/types";
 import { MAX_GUESSES, WORD_LENGTH } from "../game/types";
 
@@ -7,6 +8,8 @@ interface BoardProps {
 }
 
 export function Board({ currentGuess, guesses }: BoardProps) {
+  const confirmedLetters = createGuessTemplate(guesses);
+
   return (
     <section className="board" aria-label="Word grid" role="grid">
       {Array.from({ length: MAX_GUESSES }, (_, rowIndex) => {
@@ -21,9 +24,7 @@ export function Board({ currentGuess, guesses }: BoardProps) {
               const letter = activeWord?.[columnIndex]?.trim() ?? "";
               const isLocked =
                 isActiveRow &&
-                guesses.some(
-                  (guess) => guess.result[columnIndex] === "correct",
-                );
+                confirmedLetters[columnIndex] !== " ";
               const letterState =
                 submittedGuess?.result[columnIndex] ??
                 (isLocked ? "correct" : undefined);

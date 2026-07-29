@@ -20,6 +20,10 @@ Open `http://localhost:5173`.
 ## Quality checks
 
 ```bash
+npm run check
+
+# Or run each gate separately:
+npm test
 npm run lint
 npm run build
 ```
@@ -63,12 +67,17 @@ src/
 │   └── Keyboard.tsx
 ├── game/
 │   ├── WORD_LIST_LICENSE.md
+│   ├── draftGuess.ts
+│   ├── draftGuess.test.ts
 │   ├── evaluateGuess.ts
+│   ├── evaluateGuess.test.ts
 │   ├── keyboard.ts
+│   ├── keyboard.test.ts
 │   ├── types.ts
 │   ├── validWords.txt
 │   └── words.ts
 ├── hooks/
+│   ├── usePhysicalKeyboard.ts
 │   └── useWordle.ts
 ├── App.tsx
 ├── main.tsx
@@ -77,6 +86,48 @@ src/
 
 React components render the interface. `useWordle` owns state transitions.
 Pure game rules live outside React so they can be read and tested independently.
+Tests are colocated with those rules so each module's contract is easy to find.
+
+## Architecture walkthrough
+
+The dependency direction is intentionally one-way:
+
+```text
+App and components (rendering)
+          ↓
+useWordle (game orchestration and state)
+          ↓
+game/* (pure rules, draft editing, dictionary, types)
+
+Physical keys ──→ usePhysicalKeyboard ──┐
+                                       ├──→ inputKey ──→ useWordle
+On-screen keyboard buttons ────────────┘
+```
+
+- **Components** know how to display the board, keyboard, and result modal.
+  They receive data and callbacks; they do not calculate game outcomes.
+- **`useWordle`** is the application layer. It coordinates answer selection,
+  validation, submission, status changes, and restart/give-up actions.
+- **`usePhysicalKeyboard`** is a browser adapter. It translates DOM keyboard
+  events into the same `inputKey` command used by the on-screen keyboard.
+- **`game/draftGuess.ts`** owns editing rules, including locked green letters.
+- **`game/evaluateGuess.ts`** contains the two-pass duplicate-letter algorithm.
+- **`game/keyboard.ts`** reduces submitted guesses into the strongest known
+  state for each key: `correct` beats `present`, which beats `absent`.
+- **`game/words.ts`** owns answer selection and dictionary validation.
+
+This separation makes the important rules deterministic and testable without
+rendering React or mocking a browser.
+
+### 60-second interview explanation
+
+1. The UI is split into small presentational components.
+2. Both touch and physical keyboard input converge on one `inputKey` command.
+3. `useWordle` owns the game lifecycle but delegates calculations to pure
+   functions.
+4. Guess evaluation uses two passes so repeated letters are scored correctly.
+5. Pure modules have focused tests; the deployment runs from the same
+   reproducible `npm` scripts documented above.
 
 ## The non-obvious algorithm
 
@@ -144,8 +195,10 @@ disables further input, and focuses the restart action.
 ### One stateful hook
 
 The application has one screen and one owner for its state. A custom hook keeps
-game transitions together while components stay presentational. Redux, Context,
-and a reducer would add indirection without solving a current problem.
+game transitions together while components stay presentational. A second,
+stateless browser-adapter hook handles physical keyboard events and forwards
+them to the same input command. Redux, Context, and a reducer would add
+indirection without solving a current problem.
 
 ## Known issues before a real public launch
 
@@ -189,9 +242,10 @@ The intended two-hour budget was divided approximately as follows:
 [`netlify.toml`](netlify.toml) configures:
 
 ```text
-Build command: npm run build
+Build command: npm run check
 Publish directory: dist
 Node version: 22.17.0
 ```
 
+The deployment is blocked if tests, linting, or the production build fails.
 No environment variables are required.

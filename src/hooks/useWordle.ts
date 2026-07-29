@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import {
+  createGuessTemplate,
+  EMPTY_GUESS,
+  insertLetter,
+  isCompleteGuess,
+  removeLastEditableLetter,
+} from "../game/draftGuess";
 import { evaluateGuess } from "../game/evaluateGuess";
 import { getKeyboardStates } from "../game/keyboard";
 import type {
@@ -6,11 +13,12 @@ import type {
   LetterState,
   SubmittedGuess,
 } from "../game/types";
-import { MAX_GUESSES, WORD_LENGTH } from "../game/types";
+import { MAX_GUESSES } from "../game/types";
 import { chooseAnswer, isValidWord } from "../game/words";
+import { usePhysicalKeyboard } from "./usePhysicalKeyboard";
 
 interface WordleGame {
-  answer: string;
+  canGiveUp: boolean;
   currentGuess: string;
   guesses: SubmittedGuess[];
   keyboardStates: Partial<Record<string, LetterState>>;
@@ -19,22 +27,6 @@ interface WordleGame {
   giveUp: () => void;
   inputKey: (key: string) => void;
   restart: () => void;
-}
-
-const EMPTY_GUESS = " ".repeat(WORD_LENGTH);
-
-function createGuessTemplate(guesses: SubmittedGuess[]): string {
-  const template = Array<string>(WORD_LENGTH).fill(" ");
-
-  for (const guess of guesses) {
-    guess.result.forEach((state, index) => {
-      if (state === "correct") {
-        template[index] = guess.word[index];
-      }
-    });
-  }
-
-  return template.join("");
 }
 
 export function useWordle(): WordleGame {
@@ -48,9 +40,12 @@ export function useWordle(): WordleGame {
     () => getKeyboardStates(guesses),
     [guesses],
   );
+  const canGiveUp =
+    status === "playing" &&
+    (guesses.length > 0 || isCompleteGuess(currentGuess));
 
   const submitGuess = useCallback((guess: string) => {
-    if (guess.includes(" ")) {
+    if (!isCompleteGuess(guess)) {
       setMessage("Enter five letters.");
       return;
     }
@@ -94,19 +89,10 @@ export function useWordle(): WordleGame {
       }
 
       if (normalizedKey === "BACKSPACE") {
-        setCurrentGuess((guess) => {
-          const template = createGuessTemplate(guesses);
-          const letters = guess.split("");
-
-          for (let index = WORD_LENGTH - 1; index >= 0; index -= 1) {
-            if (template[index] === " " && letters[index] !== " ") {
-              letters[index] = " ";
-              break;
-            }
-          }
-
-          return letters.join("");
-        });
+        const template = createGuessTemplate(guesses);
+        setCurrentGuess((guess) =>
+          removeLastEditableLetter(guess, template),
+        );
         setMessage("");
         return;
       }
@@ -116,20 +102,16 @@ export function useWordle(): WordleGame {
           return;
         }
 
-        const emptyPosition = currentGuess.indexOf(" ");
+        const nextGuess = insertLetter(currentGuess, normalizedKey);
 
-        if (emptyPosition === -1) {
+        if (nextGuess === currentGuess) {
           return;
         }
-
-        const nextGuessLetters = currentGuess.split("");
-        nextGuessLetters[emptyPosition] = normalizedKey;
-        const nextGuess = nextGuessLetters.join("");
 
         setCurrentGuess(nextGuess);
         setMessage("");
 
-        if (!nextGuess.includes(" ")) {
+        if (isCompleteGuess(nextGuess)) {
           submitGuess(nextGuess);
         }
       }
@@ -137,29 +119,7 @@ export function useWordle(): WordleGame {
     [currentGuess, guesses, keyboardStates, status, submitGuess],
   );
 
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.ctrlKey || event.metaKey || event.altKey) {
-        return;
-      }
-
-      const key = event.key.toUpperCase();
-      const isGameKey =
-        /^[A-Z]$/.test(key) || key === "ENTER" || key === "BACKSPACE";
-
-      if (event.target instanceof HTMLButtonElement && key === "ENTER") {
-        return;
-      }
-
-      if (isGameKey) {
-        event.preventDefault();
-        inputKey(key);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [inputKey]);
+  usePhysicalKeyboard(inputKey);
 
   const restart = useCallback(() => {
     setAnswer(chooseAnswer());
@@ -176,7 +136,7 @@ export function useWordle(): WordleGame {
   }, [answer]);
 
   return {
-    answer,
+    canGiveUp,
     currentGuess,
     guesses,
     keyboardStates,
