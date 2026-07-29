@@ -57,6 +57,12 @@ themes, hints, and a backend.
 
 ### Known issues
 
+- The interaction design is functional but not production-ready. It needs
+  stronger attempt progression and feedback so losing a chance feels meaningful
+  without distracting from the word puzzle.
+- Win and loss states need more satisfying visual feedback, such as restrained
+  transitions, a clearer result summary, and an optional celebration. Motion,
+  sound, and haptics would need accessible controls and reduced-motion support.
 - Refreshing starts a new game.
 - Answers and word data are visible in the client bundle.
 - The predefined dictionary may omit regional or newly coined words.
