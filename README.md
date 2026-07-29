@@ -51,8 +51,11 @@ does not choose an obscure answer.
   absent. A correctly positioned letter is carried into the same position in
   the next row and locked. This removes repetitive input and lets the player
   concentrate on finding the unresolved letters.
-- **Automatic checking:** a guess is checked after its fifth letter. Invalid
-  words remain editable so the player can correct them immediately.
+- **Automatic checking:** the reference game asks the player to press Enter
+  after typing five letters. Because every valid guess has a known length, this
+  MVP checks it immediately after the fifth letter and removes that extra step.
+  Invalid words remain editable, and Enter is still supported for keyboard
+  familiarity.
 
 ### Deliberately left out
 
