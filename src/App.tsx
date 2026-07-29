@@ -18,34 +18,46 @@ export default function App() {
 
   return (
     <div className="app">
-      <main className="game">
-        <header className="header">
-          <h1>Wordle</h1>
-        </header>
+      <div className="game-shell">
+        <main className="game">
+          <header className="header">
+            <h1>Wordle</h1>
+          </header>
 
-        {status === "playing" &&
-          (guesses.length > 0 || !currentGuess.includes(" ")) && (
-            <button className="give-up" onClick={giveUp} type="button">
-              Give up
-            </button>
-          )}
+          {status === "playing" &&
+            (guesses.length > 0 || !currentGuess.includes(" ")) && (
+              <button className="give-up" onClick={giveUp} type="button">
+                Give up
+              </button>
+            )}
 
-        <Board currentGuess={currentGuess} guesses={guesses} />
+          <Board currentGuess={currentGuess} guesses={guesses} />
 
-        <div className="message-area">
-          {status === "playing" && message && (
-            <p className="message warning" aria-live="polite">
-              {message}
-            </p>
-          )}
-        </div>
+          <div className="message-area">
+            {status === "playing" && message && (
+              <p className="message warning" aria-live="polite">
+                {message}
+              </p>
+            )}
+          </div>
 
-        <Keyboard
-          disabled={status !== "playing"}
-          onKey={inputKey}
-          states={keyboardStates}
-        />
-      </main>
+          <Keyboard
+            disabled={status !== "playing"}
+            onKey={inputKey}
+            states={keyboardStates}
+          />
+        </main>
+
+        <a
+          aria-label="How to play? Opens a YouTube video in a new tab"
+          className="how-to-play"
+          href="https://www.youtube.com/watch?v=lv4Zg-209MY&autoplay=1"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          How to play?
+        </a>
+      </div>
 
       {status !== "playing" && (
         <GameOverModal
