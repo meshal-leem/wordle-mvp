@@ -263,9 +263,9 @@ button.new-game:hover:not(:disabled) {
 }
 
 .key.absent {
-  border-color: #a4a8aa;
-  background: #e5e7e8;
-  color: #626669;
+  border-color: #d5d8da;
+  background: #f5f6f6;
+  color: #878b8e;
 }
 
 .key:disabled {
@@ -273,7 +273,11 @@ button.new-game:hover:not(:disabled) {
   opacity: 0.75;
 }
 
-button:hover:not(:disabled) {
+.key.absent:disabled {
+  opacity: 1;
+}
+
+.key:hover:not(:disabled):not(.correct):not(.present) {
   background: #f3f4f5;
 }
 
