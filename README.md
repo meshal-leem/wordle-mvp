@@ -65,6 +65,10 @@ src/
 │   ├── Board.tsx
 │   ├── GameOverModal.tsx
 │   └── Keyboard.tsx
+├── config/
+│   ├── content.json
+│   ├── content.test.ts
+│   └── content.ts
 ├── game/
 │   ├── WORD_LIST_LICENSE.md
 │   ├── draftGuess.ts
@@ -79,6 +83,8 @@ src/
 ├── hooks/
 │   ├── usePhysicalKeyboard.ts
 │   └── useWordle.ts
+├── theme/
+│   └── colors.css
 ├── App.tsx
 ├── main.tsx
 └── styles.css
@@ -118,6 +124,27 @@ On-screen keyboard buttons ────────────┘
 
 This separation makes the important rules deterministic and testable without
 rendering React or mocking a browser.
+
+## Content and color configuration
+
+All user-facing copy is in
+[`src/config/content.json`](src/config/content.json). This includes headings,
+buttons, gameplay messages, modal text, accessibility labels, metadata, emoji,
+and the tutorial URL. Messages that need dynamic values use named placeholders,
+for example:
+
+```json
+{
+  "solved": "Solved in {attempts}!",
+  "answerReveal": "The word was {answer}."
+}
+```
+
+All raw colors are in
+[`src/theme/colors.css`](src/theme/colors.css). The stylesheet uses semantic
+custom properties such as `--color-correct`, `--color-present`, and
+`--color-danger`, so the palette can be changed without searching through
+component or layout styles.
 
 ### 60-second interview explanation
 

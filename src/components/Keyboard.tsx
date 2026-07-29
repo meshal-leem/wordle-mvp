@@ -1,3 +1,4 @@
+import { content, formatText } from "../config/content";
 import { KEYBOARD_ROWS } from "../game/keyboard";
 import type { LetterState } from "../game/types";
 
@@ -9,7 +10,7 @@ interface KeyboardProps {
 
 export function Keyboard({ disabled, onKey, states }: KeyboardProps) {
   return (
-    <section className="keyboard" aria-label="On-screen keyboard">
+    <section className="keyboard" aria-label={content.keyboard.ariaLabel}>
       {KEYBOARD_ROWS.map((row, rowIndex) => (
         <div className="keyboard-row" key={rowIndex}>
           {rowIndex === 2 && (
@@ -19,13 +20,20 @@ export function Keyboard({ disabled, onKey, states }: KeyboardProps) {
               onClick={() => onKey("ENTER")}
               type="button"
             >
-              ENTER
+              {content.keyboard.enter}
             </button>
           )}
 
           {row.map((letter) => (
             <button
-              aria-label={`Letter ${letter}${states[letter] ? `, ${states[letter]}` : ""}`}
+              aria-label={formatText(content.keyboard.letterAria, {
+                letter,
+                state: states[letter]
+                  ? formatText(content.keyboard.stateSuffix, {
+                      state: content.letterStates[states[letter]],
+                    })
+                  : "",
+              })}
               className={`key ${states[letter] ?? ""}`}
               disabled={disabled || states[letter] === "absent"}
               key={letter}
@@ -38,13 +46,13 @@ export function Keyboard({ disabled, onKey, states }: KeyboardProps) {
 
           {rowIndex === 2 && (
             <button
-              aria-label="Backspace"
+              aria-label={content.keyboard.backspaceAria}
               className="key key-wide"
               disabled={disabled}
               onClick={() => onKey("BACKSPACE")}
               type="button"
             >
-              <span aria-hidden="true">⌫</span>
+              <span aria-hidden="true">{content.keyboard.backspace}</span>
             </button>
           )}
         </div>

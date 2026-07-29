@@ -1,0 +1,41 @@
+:root {
+  /* Base surfaces and text */
+  --color-text-primary: #202124;
+  --color-text-secondary: #596273;
+  --color-page-background: #f3f4f5;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f2f3;
+
+  /* Borders and interaction */
+  --color-border-default: #cfd3d6;
+  --color-border-tile: #d5d8da;
+  --color-border-filled: #878b8e;
+  --color-focus: #1d4ed8;
+
+  /* Success and correct-letter states */
+  --color-success: #538d4e;
+  --color-success-hover: #457a41;
+  --color-success-text: #3f713b;
+  --color-correct: #6aaa64;
+  --color-correct-soft: #eef7ed;
+
+  /* Present-letter states */
+  --color-present: #c9b458;
+  --color-present-text: #806f1d;
+  --color-present-soft: #fff9df;
+
+  /* Absent-letter states */
+  --color-absent: #787c7e;
+  --color-absent-soft: #f5f6f6;
+
+  /* Warning and destructive actions */
+  --color-danger: #b42318;
+  --color-danger-border: #f0b4ae;
+  --color-danger-soft: #fef3f2;
+
+  /* Overlays and shadows */
+  --color-overlay: rgb(32 33 36 / 45%);
+  --color-shadow-card: rgb(23 32 51 / 9%);
+  --color-shadow-modal: rgb(23 32 51 / 20%);
+  --color-shadow-focus: rgb(32 33 36 / 10%);
+}

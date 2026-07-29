@@ -1,3 +1,4 @@
+import { content, formatText } from "../config/content";
 import { createGuessTemplate } from "../game/draftGuess";
 import type { SubmittedGuess } from "../game/types";
 import { MAX_GUESSES, WORD_LENGTH } from "../game/types";
@@ -11,7 +12,7 @@ export function Board({ currentGuess, guesses }: BoardProps) {
   const confirmedLetters = createGuessTemplate(guesses);
 
   return (
-    <section className="board" aria-label="Word grid" role="grid">
+    <section className="board" aria-label={content.board.ariaLabel} role="grid">
       {Array.from({ length: MAX_GUESSES }, (_, rowIndex) => {
         const submittedGuess = guesses[rowIndex];
         const isActiveRow = rowIndex === guesses.length;
@@ -30,13 +31,23 @@ export function Board({ currentGuess, guesses }: BoardProps) {
                 (isLocked ? "correct" : undefined);
               const isNextPosition = columnIndex === nextPosition;
               const stateLabel = letterState
-                ? `, ${letterState}`
+                ? formatText(content.board.stateSuffix, {
+                    state: content.letterStates[letterState],
+                  })
                 : "";
-              const positionLabel = isNextPosition ? ", next letter" : "";
+              const positionLabel = isNextPosition
+                ? content.board.nextPositionSuffix
+                : "";
 
               return (
                 <div
-                  aria-label={`Row ${rowIndex + 1}, column ${columnIndex + 1}: ${letter || "empty"}${stateLabel}${positionLabel}`}
+                  aria-label={formatText(content.board.cellAria, {
+                    row: rowIndex + 1,
+                    column: columnIndex + 1,
+                    letter: letter || content.board.empty,
+                    state: stateLabel,
+                    position: positionLabel,
+                  })}
                   className={`tile ${letterState ?? ""} ${isNextPosition ? "next-position" : ""}`}
                   key={columnIndex}
                   role="gridcell"

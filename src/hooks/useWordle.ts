@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
+import { content, formatText } from "../config/content";
 import {
   createGuessTemplate,
   EMPTY_GUESS,
@@ -46,12 +47,12 @@ export function useWordle(): WordleGame {
 
   const submitGuess = useCallback((guess: string) => {
     if (!isCompleteGuess(guess)) {
-      setMessage("Enter five letters.");
+      setMessage(content.messages.incompleteGuess);
       return;
     }
 
     if (!isValidWord(guess)) {
-      setMessage("We don't recognize that word. Try another five-letter word.");
+      setMessage(content.messages.invalidWord);
       return;
     }
 
@@ -66,10 +67,14 @@ export function useWordle(): WordleGame {
 
     if (guess === answer) {
       setStatus("won");
-      setMessage(`Solved in ${nextGuesses.length}!`);
+      setMessage(
+        formatText(content.messages.solved, {
+          attempts: nextGuesses.length,
+        }),
+      );
     } else if (nextGuesses.length === MAX_GUESSES) {
       setStatus("lost");
-      setMessage(`The word was ${answer}.`);
+      setMessage(formatText(content.messages.answerReveal, { answer }));
     } else {
       setMessage("");
     }
@@ -132,7 +137,7 @@ export function useWordle(): WordleGame {
   const giveUp = useCallback(() => {
     setCurrentGuess(EMPTY_GUESS);
     setStatus("lost");
-    setMessage(`The word was ${answer}.`);
+    setMessage(formatText(content.messages.answerReveal, { answer }));
   }, [answer]);
 
   return {

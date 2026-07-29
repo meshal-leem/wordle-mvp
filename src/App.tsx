@@ -1,6 +1,7 @@
 import { Board } from "./components/Board";
 import { GameOverModal } from "./components/GameOverModal";
 import { Keyboard } from "./components/Keyboard";
+import { content } from "./config/content";
 import { useWordle } from "./hooks/useWordle";
 import "./styles.css";
 
@@ -22,12 +23,12 @@ export default function App() {
       <div className="game-shell">
         <main className="game">
           <header className="header">
-            <h1>Wordle</h1>
+            <h1>{content.game.title}</h1>
           </header>
 
           {canGiveUp && (
             <button className="give-up" onClick={giveUp} type="button">
-              Give up
+              {content.game.giveUp}
             </button>
           )}
 
@@ -48,13 +49,13 @@ export default function App() {
           />
 
           <a
-            aria-label="How to play? Opens a YouTube video in a new tab"
+            aria-label={content.game.howToPlayAria}
             className="how-to-play"
-            href="https://www.youtube.com/watch?v=lv4Zg-209MY&autoplay=1"
+            href={content.game.howToPlayUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
-            How to play?
+            {content.game.howToPlay}
           </a>
         </main>
       </div>

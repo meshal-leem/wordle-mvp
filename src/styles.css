@@ -1,6 +1,8 @@
+@import "./theme/colors.css";
+
 :root {
-  color: #202124;
-  background: #f3f4f5;
+  color: var(--color-text-primary);
+  background: var(--color-page-background);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -50,8 +52,8 @@ button {
   padding: clamp(1.25rem, 4dvh, 4rem) clamp(1rem, 6vw, 4rem);
   overflow: hidden;
   border-radius: 2rem;
-  background: #ffffff;
-  box-shadow: 0 1rem 3rem rgb(23 32 51 / 9%);
+  background: var(--color-surface);
+  box-shadow: 0 1rem 3rem var(--color-shadow-card);
   flex-direction: column;
   align-items: center;
   flex: 1;
@@ -62,7 +64,7 @@ button {
   z-index: 1;
   top: clamp(1.25rem, 4dvh, 4rem);
   left: clamp(1rem, 6vw, 4rem);
-  color: #596273;
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
   font-weight: 650;
   text-decoration-line: underline;
@@ -71,12 +73,12 @@ button {
 }
 
 .how-to-play:hover {
-  color: #3f713b;
+  color: var(--color-success-text);
 }
 
 .how-to-play:focus-visible {
   border-radius: 0.2rem;
-  outline: 3px solid #1d4ed8;
+  outline: 3px solid var(--color-focus);
   outline-offset: 3px;
 }
 
@@ -109,26 +111,26 @@ button {
   margin: 0;
   padding: 0.45rem 0.8rem;
   border-radius: 0.4rem;
-  background: #f1f2f3;
-  color: #596273;
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
   font-weight: 650;
   text-align: center;
 }
 
 .message.warning {
-  background: #fef3f2;
-  color: #b42318;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
 }
 
 .new-game,
 .give-up {
   min-height: 2.25rem;
   padding: 0.4rem 0.75rem;
-  border: 1px solid #cfd3d6;
+  border: 1px solid var(--color-border-default);
   border-radius: 0.4rem;
-  background: #ffffff;
-  color: #202124;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 700;
@@ -138,18 +140,18 @@ button {
   position: absolute;
   top: clamp(1.25rem, 4dvh, 4rem);
   right: clamp(1rem, 6vw, 4rem);
-  border-color: #f0b4ae;
-  color: #b42318;
+  border-color: var(--color-danger-border);
+  color: var(--color-danger);
 }
 
 .new-game {
-  border-color: #538d4e;
-  background: #538d4e;
-  color: #ffffff;
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: var(--color-surface);
 }
 
 button.new-game:hover:not(:disabled) {
-  background: #457a41;
+  background: var(--color-success-hover);
 }
 
 .modal-backdrop {
@@ -157,7 +159,7 @@ button.new-game:hover:not(:disabled) {
   z-index: 10;
   display: grid;
   padding: 1rem;
-  background: rgb(32 33 36 / 45%);
+  background: var(--color-overlay);
   inset: 0;
   place-items: center;
 }
@@ -166,8 +168,8 @@ button.new-game:hover:not(:disabled) {
   width: min(100%, 22rem);
   padding: 2rem;
   border-radius: 1rem;
-  background: #ffffff;
-  box-shadow: 0 1rem 3rem rgb(23 32 51 / 20%);
+  background: var(--color-surface);
+  box-shadow: 0 1rem 3rem var(--color-shadow-modal);
   text-align: center;
 }
 
@@ -184,7 +186,7 @@ button.new-game:hover:not(:disabled) {
 
 .game-over-modal p {
   margin: 0.75rem 0 1.25rem;
-  color: #596273;
+  color: var(--color-text-secondary);
   font-weight: 650;
 }
 
@@ -211,9 +213,9 @@ button.new-game:hover:not(:disabled) {
   display: grid;
   aspect-ratio: 1;
   place-items: center;
-  border: 3px solid #d5d8da;
+  border: 3px solid var(--color-border-tile);
   border-radius: 0.65rem;
-  background: #ffffff;
+  background: var(--color-surface);
   font-size: clamp(1.5rem, 6vw, 2.25rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -223,30 +225,30 @@ button.new-game:hover:not(:disabled) {
 }
 
 .tile:not(:empty) {
-  border-color: #878b8e;
+  border-color: var(--color-border-filled);
 }
 
 .tile.next-position {
-  border-color: #202124;
-  box-shadow: 0 0 0 2px rgb(32 33 36 / 10%);
+  border-color: var(--color-text-primary);
+  box-shadow: 0 0 0 2px var(--color-shadow-focus);
 }
 
 .correct {
-  border-color: #6aaa64;
-  background: #6aaa64;
-  color: #ffffff;
+  border-color: var(--color-correct);
+  background: var(--color-correct);
+  color: var(--color-surface);
 }
 
 .present {
-  border-color: #c9b458;
-  background: #c9b458;
-  color: #ffffff;
+  border-color: var(--color-present);
+  background: var(--color-present);
+  color: var(--color-surface);
 }
 
 .absent {
-  border-color: #787c7e;
-  background: #787c7e;
-  color: #ffffff;
+  border-color: var(--color-absent);
+  background: var(--color-absent);
+  color: var(--color-surface);
 }
 
 .keyboard {
@@ -267,10 +269,10 @@ button.new-game:hover:not(:disabled) {
   min-width: 0;
   height: clamp(2.75rem, 6dvh, 4.25rem);
   padding: 0 0.25rem;
-  border: 3px solid #d5d8da;
+  border: 3px solid var(--color-border-tile);
   border-radius: 0.55rem;
-  background: #ffffff;
-  color: #202124;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
   cursor: pointer;
   flex: 1;
   place-items: center;
@@ -284,21 +286,21 @@ button.new-game:hover:not(:disabled) {
 }
 
 .key.correct {
-  border-color: #538d4e;
-  background: #eef7ed;
-  color: #3f713b;
+  border-color: var(--color-success);
+  background: var(--color-correct-soft);
+  color: var(--color-success-text);
 }
 
 .key.present {
-  border-color: #c9b458;
-  background: #fff9df;
-  color: #806f1d;
+  border-color: var(--color-present);
+  background: var(--color-present-soft);
+  color: var(--color-present-text);
 }
 
 .key.absent {
-  border-color: #d5d8da;
-  background: #f5f6f6;
-  color: #878b8e;
+  border-color: var(--color-border-tile);
+  background: var(--color-absent-soft);
+  color: var(--color-border-filled);
 }
 
 .key:disabled {
@@ -311,11 +313,11 @@ button.new-game:hover:not(:disabled) {
 }
 
 .key:hover:not(:disabled):not(.correct):not(.present) {
-  background: #f3f4f5;
+  background: var(--color-page-background);
 }
 
 button:focus-visible {
-  outline: 3px solid #1d4ed8;
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 

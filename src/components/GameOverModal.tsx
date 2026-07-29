@@ -1,3 +1,5 @@
+import { content } from "../config/content";
+
 interface GameOverModalProps {
   message: string;
   onRestart: () => void;
@@ -18,15 +20,17 @@ export function GameOverModal({
         role="dialog"
       >
         <div aria-hidden="true" className="result-emoji">
-          {won ? "🎉" : "💪"}
+          {won ? content.modal.winEmoji : content.modal.lossEmoji}
         </div>
         <h2 id="game-result-title">
-          {won ? "Great job!" : "Nice try!"}
+          {won ? content.modal.winTitle : content.modal.lossTitle}
         </h2>
         <p>{message}</p>
-        {!won && <p className="encouragement">Ready for another round?</p>}
+        {!won && (
+          <p className="encouragement">{content.modal.encouragement}</p>
+        )}
         <button autoFocus className="new-game" onClick={onRestart} type="button">
-          Restart game
+          {content.modal.restart}
         </button>
       </section>
     </div>

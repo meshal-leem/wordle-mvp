@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "title": "Wordle",
+    "description": "A small, accessible Wordle game built with React."
+  },
+  "game": {
+    "title": "Wordle",
+    "giveUp": "Give up",
+    "howToPlay": "How to play?",
+    "howToPlayAria": "How to play? Opens a YouTube video in a new tab",
+    "howToPlayUrl": "https://www.youtube.com/watch?v=lv4Zg-209MY&autoplay=1"
+  },
+  "messages": {
+    "incompleteGuess": "Enter five letters.",
+    "invalidWord": "We don't recognize that word. Try another five-letter word.",
+    "solved": "Solved in {attempts}!",
+    "answerReveal": "The word was {answer}."
+  },
+  "board": {
+    "ariaLabel": "Word grid",
+    "cellAria": "Row {row}, column {column}: {letter}{state}{position}",
+    "empty": "empty",
+    "stateSuffix": ", {state}",
+    "nextPositionSuffix": ", next letter"
+  },
+  "keyboard": {
+    "ariaLabel": "On-screen keyboard",
+    "enter": "ENTER",
+    "backspace": "⌫",
+    "backspaceAria": "Backspace",
+    "letterAria": "Letter {letter}{state}",
+    "stateSuffix": ", {state}"
+  },
+  "letterStates": {
+    "correct": "correct",
+    "present": "present",
+    "absent": "absent"
+  },
+  "modal": {
+    "winEmoji": "🎉",
+    "lossEmoji": "💪",
+    "winTitle": "Great job!",
+    "lossTitle": "Nice try!",
+    "encouragement": "Ready for another round?",
+    "restart": "Restart game"
+  }
+}
