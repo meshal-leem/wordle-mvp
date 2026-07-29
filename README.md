@@ -84,9 +84,13 @@ daily mode, and add difficulty and kids modes after validating the core loop.
 
 ### Time allocation
 
+I used a customer-first approach informed by my own experience as a gamer. I
+repeatedly played the build, noted where input felt repetitive or distracting,
+and prioritized changes that kept attention on solving the word.
+
 The focused build was split roughly across game rules and edge cases (40%),
-interaction and responsive UI (35%), and tests, deployment, and documentation
-(25%).
+playtesting, interaction, and responsive UI (35%), and tests, deployment, and
+documentation (25%).
 
 ## Code map
 
