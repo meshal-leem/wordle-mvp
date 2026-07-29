@@ -43,8 +43,12 @@ does not choose an obscure answer.
 - **Two-pass scoring:** exact matches are reserved before misplaced letters are
   evaluated. This handles repeated letters without counting one answer letter
   more than once.
-- **Fast input:** a guess is checked after its fifth letter. Invalid words stay
-  editable, and confirmed green letters carry into the next row.
+- **Deduction-first input:** a letter is disabled after the game proves it is
+  absent. A correctly positioned letter is carried into the same position in
+  the next row and locked. This removes repetitive input and lets the player
+  concentrate on finding the unresolved letters.
+- **Automatic checking:** a guess is checked after its fifth letter. Invalid
+  words remain editable so the player can correct them immediately.
 
 ### Deliberately left out
 
