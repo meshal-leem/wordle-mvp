@@ -21,15 +21,36 @@ interface WordleGame {
   restart: () => void;
 }
 
+const EMPTY_GUESS = " ".repeat(WORD_LENGTH);
+
+function createGuessTemplate(guesses: SubmittedGuess[]): string {
+  const template = Array<string>(WORD_LENGTH).fill(" ");
+
+  for (const guess of guesses) {
+    guess.result.forEach((state, index) => {
+      if (state === "correct") {
+        template[index] = guess.word[index];
+      }
+    });
+  }
+
+  return template.join("");
+}
+
 export function useWordle(): WordleGame {
   const [answer, setAnswer] = useState(chooseAnswer);
-  const [currentGuess, setCurrentGuess] = useState("");
+  const [currentGuess, setCurrentGuess] = useState(EMPTY_GUESS);
   const [guesses, setGuesses] = useState<SubmittedGuess[]>([]);
   const [status, setStatus] = useState<GameStatus>("playing");
   const [message, setMessage] = useState("");
 
+  const keyboardStates = useMemo(
+    () => getKeyboardStates(guesses),
+    [guesses],
+  );
+
   const submitGuess = useCallback((guess: string) => {
-    if (guess.length !== WORD_LENGTH) {
+    if (guess.includes(" ")) {
       setMessage("Enter five letters.");
       return;
     }
@@ -46,7 +67,7 @@ export function useWordle(): WordleGame {
     const nextGuesses = [...guesses, submittedGuess];
 
     setGuesses(nextGuesses);
-    setCurrentGuess("");
+    setCurrentGuess(createGuessTemplate(nextGuesses));
 
     if (guess === answer) {
       setStatus("won");
@@ -73,26 +94,47 @@ export function useWordle(): WordleGame {
       }
 
       if (normalizedKey === "BACKSPACE") {
-        setCurrentGuess((guess) => guess.slice(0, -1));
+        setCurrentGuess((guess) => {
+          const template = createGuessTemplate(guesses);
+          const letters = guess.split("");
+
+          for (let index = WORD_LENGTH - 1; index >= 0; index -= 1) {
+            if (template[index] === " " && letters[index] !== " ") {
+              letters[index] = " ";
+              break;
+            }
+          }
+
+          return letters.join("");
+        });
         setMessage("");
         return;
       }
 
       if (/^[A-Z]$/.test(normalizedKey)) {
-        if (currentGuess.length >= WORD_LENGTH) {
+        if (keyboardStates[normalizedKey] === "absent") {
           return;
         }
 
-        const nextGuess = `${currentGuess}${normalizedKey}`;
+        const emptyPosition = currentGuess.indexOf(" ");
+
+        if (emptyPosition === -1) {
+          return;
+        }
+
+        const nextGuessLetters = currentGuess.split("");
+        nextGuessLetters[emptyPosition] = normalizedKey;
+        const nextGuess = nextGuessLetters.join("");
+
         setCurrentGuess(nextGuess);
         setMessage("");
 
-        if (nextGuess.length === WORD_LENGTH) {
+        if (!nextGuess.includes(" ")) {
           submitGuess(nextGuess);
         }
       }
     },
-    [currentGuess, status, submitGuess],
+    [currentGuess, guesses, keyboardStates, status, submitGuess],
   );
 
   useEffect(() => {
@@ -119,21 +161,16 @@ export function useWordle(): WordleGame {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [inputKey]);
 
-  const keyboardStates = useMemo(
-    () => getKeyboardStates(guesses),
-    [guesses],
-  );
-
   const restart = useCallback(() => {
     setAnswer(chooseAnswer());
-    setCurrentGuess("");
+    setCurrentGuess(EMPTY_GUESS);
     setGuesses([]);
     setStatus("playing");
     setMessage("");
   }, []);
 
   const giveUp = useCallback(() => {
-    setCurrentGuess("");
+    setCurrentGuess(EMPTY_GUESS);
     setStatus("lost");
     setMessage(`The word was ${answer}.`);
   }, [answer]);

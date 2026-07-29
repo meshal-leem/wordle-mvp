@@ -34,6 +34,7 @@ Included:
 - Automatic submission after the fifth letter, plus Enter and Backspace support
 - Length and dictionary validation
 - Correct duplicate-letter scoring
+- Correctly placed letters carry into the next guess automatically
 - Green, amber, and gray tile feedback
 - Keyboard status updates
 - Win, loss, Give Up, answer reveal, and restart
@@ -128,6 +129,10 @@ A guess is checked as soon as the fifth letter is entered to keep play quick on
 physical and touch keyboards. If the word is not recognized, it remains in the
 active row so the player can use Backspace and correct it. Enter remains
 supported for keyboard familiarity and for showing the incomplete-word message.
+
+Green letters are carried into the same positions on each new row. They are
+treated as confirmed progress, so the player only enters the unresolved
+positions. Backspace removes only letters entered into those unresolved slots.
 
 ### Give Up and game-over modal
 

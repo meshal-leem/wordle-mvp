@@ -25,9 +25,9 @@ export function Keyboard({ disabled, onKey, states }: KeyboardProps) {
 
           {row.map((letter) => (
             <button
-              aria-label={`Letter ${letter}`}
+              aria-label={`Letter ${letter}${states[letter] ? `, ${states[letter]}` : ""}`}
               className={`key ${states[letter] ?? ""}`}
-              disabled={disabled}
+              disabled={disabled || states[letter] === "absent"}
               key={letter}
               onClick={() => onKey(letter)}
               type="button"

@@ -1,7 +1,6 @@
 import { Board } from "./components/Board";
 import { GameOverModal } from "./components/GameOverModal";
 import { Keyboard } from "./components/Keyboard";
-import { WORD_LENGTH } from "./game/types";
 import { useWordle } from "./hooks/useWordle";
 import "./styles.css";
 
@@ -22,11 +21,10 @@ export default function App() {
       <main className="game">
         <header className="header">
           <h1>Wordle</h1>
-          <span aria-hidden="true" className="title-accent" />
         </header>
 
         {status === "playing" &&
-          (guesses.length > 0 || currentGuess.length === WORD_LENGTH) && (
+          (guesses.length > 0 || !currentGuess.includes(" ")) && (
             <button className="give-up" onClick={giveUp} type="button">
               Give up
             </button>
