@@ -46,17 +46,17 @@ export default function App() {
             onKey={inputKey}
             states={keyboardStates}
           />
-        </main>
 
-        <a
-          aria-label="How to play? Opens a YouTube video in a new tab"
-          className="how-to-play"
-          href="https://www.youtube.com/watch?v=lv4Zg-209MY&autoplay=1"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          How to play?
-        </a>
+          <a
+            aria-label="How to play? Opens a YouTube video in a new tab"
+            className="how-to-play"
+            href="https://www.youtube.com/watch?v=lv4Zg-209MY&autoplay=1"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            How to play?
+          </a>
+        </main>
       </div>
 
       {status !== "playing" && (

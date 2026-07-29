@@ -338,8 +338,10 @@ button:focus-visible {
   }
 
   .how-to-play {
-    top: clamp(0.65rem, 2dvh, 1.25rem);
-    left: 0.75rem;
+    position: static;
+    margin: 0.65rem 0.25rem 0 0;
+    align-self: flex-end;
+    font-size: 0.8rem;
   }
 
   .give-up {
