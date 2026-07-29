@@ -30,6 +30,10 @@ The MVP supports a complete six-attempt game with physical and on-screen
 keyboard input, guess validation, duplicate-letter scoring, colored feedback,
 give up, answer reveal, and restart.
 
+The scope boundary was a complete, functional game rather than visual polish.
+The UI is simple and usable across desktop and mobile screen sizes, but I did
+not treat this as a custom design or mobile-first design exercise.
+
 Guesses are validated locally against a predefined set of 14,855 five-letter
 words. Answers are selected from a smaller list of familiar words so the game
 does not choose an obscure answer.
@@ -53,7 +57,8 @@ does not choose an obscure answer.
 ### Deliberately left out
 
 Accounts, a shared daily puzzle, saved progress, statistics, result sharing,
-themes, hints, and a backend.
+themes, hints, a backend, extensive animation, and a dedicated mobile-first
+design pass.
 
 ### Known issues
 
