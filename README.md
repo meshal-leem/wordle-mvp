@@ -1,4 +1,4 @@
-# Wordly
+# Wordle MVP
 
 A small, complete Wordle MVP built with React 19, TypeScript, and Vite.
 
@@ -19,7 +19,6 @@ Open `http://localhost:5173`.
 
 ```bash
 npm run lint
-npm run test
 npm run build
 ```
 
@@ -59,7 +58,6 @@ src/
 │   └── Keyboard.tsx
 ├── game/
 │   ├── evaluateGuess.ts
-│   ├── evaluateGuess.test.ts
 │   ├── keyboard.ts
 │   ├── types.ts
 │   └── words.ts
@@ -114,21 +112,15 @@ makes the full loop easy to review without adding those concerns.
 
 A `Set` provides direct, fast validation without a network dependency. Answers
 come from a small list of familiar words, while guesses are checked against
-8,636 five-letter ENABLE words. This avoids rejecting ordinary guesses without
-ever selecting an obscure dictionary entry as the answer. ENABLE is public
-domain; the bundled source and attribution are in
-`src/game/validWords.txt`.
+14,855 Wordle-compatible five-letter words. This avoids rejecting ordinary
+guesses without ever selecting an obscure dictionary entry as the answer. The
+MIT-licensed list and its license are bundled in `src/game/`.
 
 ### One stateful hook
 
 The application has one screen and one owner for its state. A custom hook keeps
 game transitions together while components stay presentational. Redux, Context,
 and a reducer would add indirection without solving a current problem.
-
-### Test the risky logic
-
-The scoring algorithm has focused tests, especially for duplicate letters.
-There are no snapshots or broad end-to-end tests in this time-boxed MVP.
 
 ## Known issues before a real public launch
 
@@ -139,7 +131,6 @@ There are no snapshots or broad end-to-end tests in this time-boxed MVP.
 - Random selection is not a shared daily challenge.
 - Accessibility is designed into semantics, focus, contrast, and touch targets,
   but has not had a formal screen-reader audit.
-- Only the core scoring algorithm has automated coverage.
 
 ## Day two
 
@@ -147,9 +138,8 @@ In priority order:
 
 1. Review dictionary feedback and add justified regional/common omissions.
 2. Persist the active game in versioned local storage.
-3. Add integration tests for keyboard input, win/loss, and restart.
-4. Add a deterministic daily puzzle and shareable results.
-5. Run a manual VoiceOver/NVDA accessibility review.
+3. Add a deterministic daily puzzle and shareable results.
+4. Run a manual VoiceOver/NVDA accessibility review.
 
 A backend would be considered only if cheating resistance, accounts, or
 cross-device progress became a real requirement.
@@ -161,14 +151,14 @@ The intended two-hour budget was divided approximately as follows:
 - 15 minutes: scope and product decisions
 - 30 minutes: game model and duplicate-letter algorithm
 - 35 minutes: playable React UI and keyboard input
-- 20 minutes: tests, accessibility pass, and edge cases
+- 20 minutes: accessibility pass and edge-case review
 - 20 minutes: documentation, build verification, and deployment setup
 
 ## Deploy to Netlify
 
-1. Push the repository to GitLab.
+1. Push the repository to GitHub.
 2. In Netlify, choose **Add new project → Import an existing project**.
-3. Connect GitLab and select the private repository.
+3. Connect GitHub and select the private repository.
 4. Deploy.
 
 [`netlify.toml`](netlify.toml) configures:

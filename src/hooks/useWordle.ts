@@ -34,7 +34,7 @@ export function useWordle(): WordleGame {
     }
 
     if (!isValidWord(currentGuess)) {
-      setMessage("That word is not in this game's dictionary.");
+      setMessage("We don't recognize that word. Try another five-letter word.");
       return;
     }
 

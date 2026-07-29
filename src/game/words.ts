@@ -104,6 +104,7 @@ const ANSWERS = [
 const VALID_WORDS = new Set(
   validWordsText
     .split(/\r?\n/)
+    .map((word) => word.trim().toUpperCase())
     .filter((word) => /^[A-Z]{5}$/.test(word)),
 );
 
