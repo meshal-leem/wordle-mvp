@@ -60,9 +60,17 @@ themes, hints, and a backend.
 
 ### Day two
 
-1. Persist the active game in local storage.
-2. Add a deterministic daily puzzle and shareable results.
-3. Review dictionary feedback and run a screen-reader accessibility pass.
+I would first add user accounts and server-validated game records. That
+foundation would support:
+
+1. A personal score history showing wins, attempts, and completion time.
+2. Five timed games per user each day, enforced by the server.
+3. A daily leaderboard ranked by wins, attempts used, and completion time.
+4. Easy, medium, and hard modes using separate answer lists and rules.
+5. A kids mode using simple three-letter words with optional image hints.
+
+I would build the account and scoring foundation first, then the competitive
+daily mode, and add difficulty and kids modes after validating the core loop.
 
 ### Time allocation
 
