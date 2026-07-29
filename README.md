@@ -36,7 +36,7 @@ Included:
 - Six guesses
 - Physical and on-screen keyboard input
 - Automatic submission after the fifth letter, plus Enter and Backspace support
-- Length and dictionary validation
+- Length validation and a predefined 14,855-word guess dictionary
 - Correct duplicate-letter scoring
 - Correctly placed letters carry into the next guess automatically
 - Green, amber, and gray tile feedback
@@ -71,15 +71,12 @@ src/
 │   └── content.ts
 ├── game/
 │   ├── WORD_LIST_LICENSE.md
-│   ├── draftGuess.ts
-│   ├── draftGuess.test.ts
-│   ├── evaluateGuess.ts
-│   ├── evaluateGuess.test.ts
-│   ├── keyboard.ts
-│   ├── keyboard.test.ts
+│   ├── gameLogic.ts
+│   ├── gameLogic.test.ts
+│   ├── keyboardLayout.ts
 │   ├── types.ts
 │   ├── validWords.txt
-│   └── words.ts
+│   └── wordData.ts
 ├── hooks/
 │   ├── usePhysicalKeyboard.ts
 │   └── useWordle.ts
@@ -103,7 +100,9 @@ App and components (rendering)
           ↓
 useWordle (game orchestration and state)
           ↓
-game/* (pure rules, draft editing, dictionary, types)
+gameLogic.ts (all Wordle business rules)
+          ↓
+wordData.ts + validWords.txt (predefined data)
 
 Physical keys ──→ usePhysicalKeyboard ──┐
                                        ├──→ inputKey ──→ useWordle
@@ -116,18 +115,40 @@ On-screen keyboard buttons ────────────┘
   validation, submission, status changes, and restart/give-up actions.
 - **`usePhysicalKeyboard`** is a browser adapter. It translates DOM keyboard
   events into the same `inputKey` command used by the on-screen keyboard.
-- **`game/draftGuess.ts`** owns editing rules, including locked green letters.
-- **`game/evaluateGuess.ts`** contains the two-pass duplicate-letter algorithm.
-- **`game/keyboard.ts`** reduces submitted guesses into the strongest known
-  state for each key: `correct` beats `present`, which beats `absent`.
-- **`game/words.ts`** owns answer selection and dictionary validation.
+- **`game/gameLogic.ts`** is the single home for all business rules: answer
+  selection, dictionary validation, guess scoring, locked-letter editing, and
+  keyboard-state calculation.
+- **`game/wordData.ts`** loads the predefined answers and 14,855 accepted
+  guesses. It contains data preparation, not gameplay decisions.
+- **`game/keyboardLayout.ts`** contains only the visual QWERTY row layout.
+- **`game/types.ts`** contains the shared domain types and game limits.
 
 This separation makes the important rules deterministic and testable without
 rendering React or mocking a browser.
 
+## Business logic walkthrough
+
+Open [`src/game/gameLogic.ts`](src/game/gameLogic.ts) during the interview. The
+game follows this sequence:
+
+1. `chooseAnswer` randomly selects a familiar answer from the predefined answer
+   list.
+2. `insertLetter` and `removeLastEditableLetter` update the active guess while
+   protecting confirmed green positions.
+3. `isValidWord` checks a completed guess against the predefined 14,855-word
+   `Set`, providing constant-time lookup.
+4. `evaluateGuess` performs two passes: exact matches first, then misplaced
+   letters. This prevents duplicate letters from being counted twice.
+5. `getKeyboardStates` keeps the strongest result ever seen for each key:
+   `correct` overrides `present`, and `present` overrides `absent`.
+
+`useWordle` calls these functions and owns React state, but it does not implement
+the game rules itself. The complete engine is covered by
+[`gameLogic.test.ts`](src/game/gameLogic.test.ts).
+
 ## Content and color configuration
 
-All user-facing copy is in
+Every text value used by the UI is stored in
 [`src/config/content.json`](src/config/content.json). This includes headings,
 buttons, gameplay messages, modal text, accessibility labels, metadata, emoji,
 and the tutorial URL. Messages that need dynamic values use named placeholders,
@@ -140,7 +161,7 @@ for example:
 }
 ```
 
-All raw colors are in
+Every color used by the application is stored in
 [`src/theme/colors.css`](src/theme/colors.css). The stylesheet uses semantic
 custom properties such as `--color-correct`, `--color-present`, and
 `--color-danger`, so the palette can be changed without searching through
@@ -150,10 +171,11 @@ component or layout styles.
 
 1. The UI is split into small presentational components.
 2. Both touch and physical keyboard input converge on one `inputKey` command.
-3. `useWordle` owns the game lifecycle but delegates calculations to pure
-   functions.
-4. Guess evaluation uses two passes so repeated letters are scored correctly.
-5. Pure modules have focused tests; the deployment runs from the same
+3. `useWordle` owns the game lifecycle but delegates every rule to
+   `gameLogic.ts`.
+4. The engine validates against 14,855 predefined words and uses two-pass
+   scoring so repeated letters are handled correctly.
+5. The business logic has focused tests; the deployment runs from the same
    reproducible `npm` scripts documented above.
 
 ## The non-obvious algorithm

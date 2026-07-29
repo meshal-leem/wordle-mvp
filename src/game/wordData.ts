@@ -1,8 +1,7 @@
 import validWordsText from "./validWords.txt?raw";
-import { WORD_LENGTH } from "./types";
 
 // Answers are intentionally common; accepted guesses use the broader dataset.
-const ANSWERS = [
+export const ANSWER_WORDS = [
   "APPLE",
   "BEACH",
   "BLOOM",
@@ -101,17 +100,9 @@ const ANSWERS = [
   "YOUTH",
 ] as const;
 
-const VALID_WORDS = new Set(
+export const VALID_WORDS: ReadonlySet<string> = new Set(
   validWordsText
     .split(/\r?\n/)
     .map((word) => word.trim().toUpperCase())
     .filter((word) => /^[A-Z]{5}$/.test(word)),
 );
-
-export function isValidWord(word: string): boolean {
-  return word.length === WORD_LENGTH && VALID_WORDS.has(word.toUpperCase());
-}
-
-export function chooseAnswer(): string {
-  return ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
-}

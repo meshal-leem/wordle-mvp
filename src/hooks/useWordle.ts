@@ -1,21 +1,22 @@
 import { useCallback, useMemo, useState } from "react";
 import { content, formatText } from "../config/content";
 import {
+  chooseAnswer,
   createGuessTemplate,
   EMPTY_GUESS,
+  evaluateGuess,
+  getKeyboardStates,
   insertLetter,
   isCompleteGuess,
+  isValidWord,
   removeLastEditableLetter,
-} from "../game/draftGuess";
-import { evaluateGuess } from "../game/evaluateGuess";
-import { getKeyboardStates } from "../game/keyboard";
+} from "../game/gameLogic";
 import type {
   GameStatus,
   LetterState,
   SubmittedGuess,
 } from "../game/types";
 import { MAX_GUESSES } from "../game/types";
-import { chooseAnswer, isValidWord } from "../game/words";
 import { usePhysicalKeyboard } from "./usePhysicalKeyboard";
 
 interface WordleGame {

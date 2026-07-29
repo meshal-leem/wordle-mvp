@@ -1,5 +1,5 @@
 import { content, formatText } from "../config/content";
-import { createGuessTemplate } from "../game/draftGuess";
+import { createGuessTemplate } from "../game/gameLogic";
 import type { SubmittedGuess } from "../game/types";
 import { MAX_GUESSES, WORD_LENGTH } from "../game/types";
 

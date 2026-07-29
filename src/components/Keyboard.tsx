@@ -1,5 +1,5 @@
 import { content, formatText } from "../config/content";
-import { KEYBOARD_ROWS } from "../game/keyboard";
+import { KEYBOARD_ROWS } from "../game/keyboardLayout";
 import type { LetterState } from "../game/types";
 
 interface KeyboardProps {
