@@ -16,6 +16,7 @@ interface WordleGame {
   keyboardStates: Partial<Record<string, LetterState>>;
   message: string;
   status: GameStatus;
+  giveUp: () => void;
   inputKey: (key: string) => void;
   restart: () => void;
 }
@@ -27,27 +28,27 @@ export function useWordle(): WordleGame {
   const [status, setStatus] = useState<GameStatus>("playing");
   const [message, setMessage] = useState("");
 
-  const submitGuess = useCallback(() => {
-    if (currentGuess.length !== WORD_LENGTH) {
+  const submitGuess = useCallback((guess: string) => {
+    if (guess.length !== WORD_LENGTH) {
       setMessage("Enter five letters.");
       return;
     }
 
-    if (!isValidWord(currentGuess)) {
+    if (!isValidWord(guess)) {
       setMessage("We don't recognize that word. Try another five-letter word.");
       return;
     }
 
     const submittedGuess: SubmittedGuess = {
-      word: currentGuess,
-      result: evaluateGuess(currentGuess, answer),
+      word: guess,
+      result: evaluateGuess(guess, answer),
     };
     const nextGuesses = [...guesses, submittedGuess];
 
     setGuesses(nextGuesses);
     setCurrentGuess("");
 
-    if (currentGuess === answer) {
+    if (guess === answer) {
       setStatus("won");
       setMessage(`Solved in ${nextGuesses.length}!`);
     } else if (nextGuesses.length === MAX_GUESSES) {
@@ -56,7 +57,7 @@ export function useWordle(): WordleGame {
     } else {
       setMessage("");
     }
-  }, [answer, currentGuess, guesses]);
+  }, [answer, guesses]);
 
   const inputKey = useCallback(
     (key: string) => {
@@ -67,7 +68,7 @@ export function useWordle(): WordleGame {
       const normalizedKey = key.toUpperCase();
 
       if (normalizedKey === "ENTER") {
-        submitGuess();
+        submitGuess(currentGuess);
         return;
       }
 
@@ -78,13 +79,20 @@ export function useWordle(): WordleGame {
       }
 
       if (/^[A-Z]$/.test(normalizedKey)) {
-        setCurrentGuess((guess) =>
-          guess.length < WORD_LENGTH ? `${guess}${normalizedKey}` : guess,
-        );
+        if (currentGuess.length >= WORD_LENGTH) {
+          return;
+        }
+
+        const nextGuess = `${currentGuess}${normalizedKey}`;
+        setCurrentGuess(nextGuess);
         setMessage("");
+
+        if (nextGuess.length === WORD_LENGTH) {
+          submitGuess(nextGuess);
+        }
       }
     },
-    [status, submitGuess],
+    [currentGuess, status, submitGuess],
   );
 
   useEffect(() => {
@@ -124,6 +132,12 @@ export function useWordle(): WordleGame {
     setMessage("");
   }, []);
 
+  const giveUp = useCallback(() => {
+    setCurrentGuess("");
+    setStatus("lost");
+    setMessage(`The word was ${answer}.`);
+  }, [answer]);
+
   return {
     answer,
     currentGuess,
@@ -131,6 +145,7 @@ export function useWordle(): WordleGame {
     keyboardStates,
     message,
     status,
+    giveUp,
     inputKey,
     restart,
   };
