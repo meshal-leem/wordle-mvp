@@ -339,7 +339,7 @@ button:focus-visible {
 
   .how-to-play {
     position: static;
-    margin: 0.65rem 0.25rem 0 0;
+    margin: 1.5rem 0.25rem 0 0;
     align-self: flex-end;
     font-size: 0.8rem;
   }
