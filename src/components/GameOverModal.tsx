@@ -17,6 +17,9 @@ export function GameOverModal({
         className="game-over-modal"
         role="dialog"
       >
+        <div aria-hidden="true" className="result-emoji">
+          {won ? "🎉" : "😔"}
+        </div>
         <h2 id="game-result-title">{won ? "You won!" : "Game over"}</h2>
         <p>{message}</p>
         <button autoFocus className="new-game" onClick={onRestart} type="button">

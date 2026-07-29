@@ -2,6 +2,8 @@
 
 A small, complete Wordle MVP built with React 19, TypeScript, and Vite.
 
+**Live app:** https://wordle-mvp.netlify.app/
+
 ## Run locally
 
 Use Node.js 22:
@@ -29,12 +31,13 @@ Included:
 - A random five-letter answer from a local list
 - Six guesses
 - Physical and on-screen keyboard input
-- Enter and Backspace
+- Automatic submission after the fifth letter, plus Enter and Backspace support
 - Length and dictionary validation
 - Correct duplicate-letter scoring
 - Green, amber, and gray tile feedback
 - Keyboard status updates
-- Win, loss, answer reveal, and restart
+- Win, loss, Give Up, answer reveal, and restart
+- A focused game-over modal for results and the restart action
 - Responsive layout and accessible labels/focus states
 
 Deliberately excluded:
@@ -55,11 +58,14 @@ partially finished feature set.
 src/
 ├── components/
 │   ├── Board.tsx
+│   ├── GameOverModal.tsx
 │   └── Keyboard.tsx
 ├── game/
+│   ├── WORD_LIST_LICENSE.md
 │   ├── evaluateGuess.ts
 │   ├── keyboard.ts
 │   ├── types.ts
+│   ├── validWords.txt
 │   └── words.ts
 ├── hooks/
 │   └── useWordle.ts
@@ -115,6 +121,20 @@ come from a small list of familiar words, while guesses are checked against
 14,855 Wordle-compatible five-letter words. This avoids rejecting ordinary
 guesses without ever selecting an obscure dictionary entry as the answer. The
 MIT-licensed list and its license are bundled in `src/game/`.
+
+### Automatic submission with editable invalid guesses
+
+A guess is checked as soon as the fifth letter is entered to keep play quick on
+physical and touch keyboards. If the word is not recognized, it remains in the
+active row so the player can use Backspace and correct it. Enter remains
+supported for keyboard familiarity and for showing the incomplete-word message.
+
+### Give Up and game-over modal
+
+Give Up becomes available only after a complete attempt or a submitted guess,
+so it does not distract from an untouched game. Winning, losing, or giving up
+opens a modal that communicates the outcome, reveals the answer when needed,
+disables further input, and focuses the restart action.
 
 ### One stateful hook
 

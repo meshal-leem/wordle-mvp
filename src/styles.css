@@ -151,6 +151,12 @@ button.new-game:hover:not(:disabled) {
   font-size: 1.4rem;
 }
 
+.result-emoji {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
 .game-over-modal p {
   margin: 0.75rem 0 1.25rem;
   color: #596273;
