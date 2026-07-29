@@ -1,12 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import { content } from "./config/content";
-
-document.title = content.metadata.title;
-document
-  .querySelector('meta[name="description"]')
-  ?.setAttribute("content", content.metadata.description);
 
 const rootElement = document.getElementById("root");
 
